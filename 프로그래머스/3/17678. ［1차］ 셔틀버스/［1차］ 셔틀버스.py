@@ -1,13 +1,13 @@
-# [시,분] 형태로 변환
+# 분 형태로 변환
 def t_form(s):
     h=int(s[0:2])
     m=int(s[3:5])
-    return [h,m]
+    return 60*h+m
 
 # string 형태로 변환
 def s_form(t):
-    h=str(t[0])
-    m=str(t[1])
+    h=str(t//60)
+    m=str(t%60)
     return h.zfill(2) + ":" + m.zfill(2)
 
 # t분 추가
@@ -43,23 +43,23 @@ def solution(n, t, m, timetable):
     # print("timetable:",timetable)
     
     shuttles=[]
-    first=[9,0]
+    first=540
     shuttles.append(first)
     for i in range(n-1):
-        first=min_add(first,t)
+        first+=t
         shuttles.append(first)
     # print("shuttles:",shuttles)
     last=shuttles[-1]
     
     # 막차 못타는 크루 귀가
-    timetable=[t for t in timetable if early(t,last)]
+    timetable=[t for t in timetable if t<=last]
     
     board={}
     res=[]
     
     for i in range(n):
         this_shuttle=shuttles[i]
-        can_ride=[t for t in timetable if early(t,this_shuttle)] # 지금 셔틀 이전에 줄서있던 사람
+        can_ride=[t for t in timetable if t<=this_shuttle] # 지금 셔틀 이전에 줄서있던 사람
         if(len(can_ride)>m): 
             can_ride=can_ride[:m]
         # print("can ride:",can_ride)
@@ -74,9 +74,9 @@ def solution(n, t, m, timetable):
                 res=this_shuttle
             else: 
                 if(can_ride.count(F)==m):
-                    res=min_add(F,-1)
+                    res=F-1
                 else: 
-                    res=min_add(L,-1)
+                    res=L-1
     
     answer=s_form(res)
     return answer
