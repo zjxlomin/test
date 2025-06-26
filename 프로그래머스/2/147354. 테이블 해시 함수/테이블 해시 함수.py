@@ -6,11 +6,13 @@ def solution(data, col, row_begin, row_end):
     temp={}
     for i in range(len(data)):
         k=data[i][col]
-        try: temp[k].append(data[i])
+        try: 
+            temp[k].append(data[i])
+            temp[k]=sorted(temp[k],key=lambda x:x[0], reverse=True)
         except:
             temp[k]=[]
             temp[k].append(data[i])
-        temp[k]=sorted(temp[k],key=lambda x:x[0], reverse=True)
+        
     temp=dict(sorted(temp.items(),key=lambda x:x[0]))
     
     new_data=[]
